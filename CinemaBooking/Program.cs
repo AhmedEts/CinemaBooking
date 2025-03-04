@@ -28,6 +28,7 @@ namespace CinemaBooking
             builder.Services.AddScoped<IMovieRepository, MovieRepository>();
             builder.Services.AddScoped<ICinemaRepository, CinemaRepository>();
             builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
+            builder.Services.AddScoped<IActorMovieRepository, ActorMovieRepository>();
 
             var app = builder.Build();
 

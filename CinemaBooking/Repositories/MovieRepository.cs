@@ -19,7 +19,7 @@ namespace CinemaBooking.Repositories
             return dbContext.movies
                           .Include(e => e.Cinema)
                           .Include(e => e.Category)
-                          .Include(e => e.ActorMovie)
+                          .Include(e => e.ActorMovies)
                           .ThenInclude(e => e.Actor)
                           .FirstOrDefault(e => e.Id == Id);
         }

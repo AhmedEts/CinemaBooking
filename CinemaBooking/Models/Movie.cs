@@ -34,12 +34,12 @@ namespace CinemaBooking.Models
         public Category Category { get; set; }
         [ValidateNever]
 
-        public List<Actor> Actors { get; set; }
-        [Required]
-        [ValidateNever]
+        //public List<Actor> Actors { get; set; }
+        //[Required]
+        //[ValidateNever]
         //public List<ActorMovies> ActorMovies { get; set; }
 
-        public ICollection<ActorMovie> ActorMovie { get; set; }
+        public ICollection<ActorMovie> ActorMovies { get; set; }
 
 
     }

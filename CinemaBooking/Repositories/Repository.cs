@@ -42,7 +42,8 @@ namespace CinemaBooking.Repositories
             _dbContext.SaveChanges();
         }
 
-        public IQueryable<T> Get(Expression<Func<T, bool>>? filter = null, Expression<Func<T, object>>[]? includes = null, bool tracked = true)
+        public IQueryable<T> Get(Expression<Func<T, bool>>? filter = null, 
+            Expression<Func<T, object>>[]? includes = null, bool tracked = true)
         {
             IQueryable<T> query = dbSet;
 
@@ -63,7 +64,6 @@ namespace CinemaBooking.Repositories
             {
                 query = query.AsNoTracking();
             }
-
             return query;
         }
 

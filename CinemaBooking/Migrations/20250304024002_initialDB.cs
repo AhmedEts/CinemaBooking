@@ -237,63 +237,41 @@ namespace CinemaBooking.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "ActorMovie",
-                columns: table => new
-                {
-                    ActorsId = table.Column<int>(type: "int", nullable: false),
-                    MoviesId = table.Column<int>(type: "int", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_ActorMovie", x => new { x.ActorsId, x.MoviesId });
-                    table.ForeignKey(
-                        name: "FK_ActorMovie_actors_ActorsId",
-                        column: x => x.ActorsId,
-                        principalTable: "actors",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_ActorMovie_movies_MoviesId",
-                        column: x => x.MoviesId,
-                        principalTable: "movies",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "ActorMovies",
                 columns: table => new
                 {
-                    ActorsId = table.Column<int>(type: "int", nullable: false),
-                    MoviesId = table.Column<int>(type: "int", nullable: false),
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    ActorId = table.Column<int>(type: "int", nullable: false),
+                    MovieId = table.Column<int>(type: "int", nullable: false),
                     Role = table.Column<string>(type: "nvarchar(max)", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_ActorMovies", x => new { x.ActorsId, x.MoviesId });
+                    table.PrimaryKey("PK_ActorMovies", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_ActorMovies_actors_ActorsId",
-                        column: x => x.ActorsId,
+                        name: "FK_ActorMovies_actors_ActorId",
+                        column: x => x.ActorId,
                         principalTable: "actors",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_ActorMovies_movies_MoviesId",
-                        column: x => x.MoviesId,
+                        name: "FK_ActorMovies_movies_MovieId",
+                        column: x => x.MovieId,
                         principalTable: "movies",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_ActorMovie_MoviesId",
-                table: "ActorMovie",
-                column: "MoviesId");
+                name: "IX_ActorMovies_ActorId",
+                table: "ActorMovies",
+                column: "ActorId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_ActorMovies_MoviesId",
+                name: "IX_ActorMovies_MovieId",
                 table: "ActorMovies",
-                column: "MoviesId");
+                column: "MovieId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetRoleClaims_RoleId",
@@ -348,9 +326,6 @@ namespace CinemaBooking.Migrations
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.DropTable(
-                name: "ActorMovie");
-
             migrationBuilder.DropTable(
                 name: "ActorMovies");
 

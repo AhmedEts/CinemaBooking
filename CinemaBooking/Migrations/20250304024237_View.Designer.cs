@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CinemaBooking.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20250303232042_initialDB")]
-    partial class initialDB
+    [Migration("20250304024237_View")]
+    partial class View
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -24,21 +24,6 @@ namespace CinemaBooking.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
-
-            modelBuilder.Entity("ActorMovie", b =>
-                {
-                    b.Property<int>("ActorsId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("MoviesId")
-                        .HasColumnType("int");
-
-                    b.HasKey("ActorsId", "MoviesId");
-
-                    b.HasIndex("MoviesId");
-
-                    b.ToTable("ActorMovie", (string)null);
-                });
 
             modelBuilder.Entity("CinemaBooking.Models.Actor", b =>
                 {
@@ -75,19 +60,23 @@ namespace CinemaBooking.Migrations
 
             modelBuilder.Entity("CinemaBooking.Models.ActorMovie", b =>
                 {
-                    b.Property<int>("ActorsId")
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    b.Property<int>("MoviesId")
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("ActorId")
                         .HasColumnType("int");
 
-                    b.Property<string>("Role")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<int>("MovieId")
+                        .HasColumnType("int");
 
-                    b.HasKey("ActorsId", "MoviesId");
+                    b.HasKey("Id");
 
-                    b.HasIndex("MoviesId");
+                    b.HasIndex("ActorId");
+
+                    b.HasIndex("MovieId");
 
                     b.ToTable("ActorMovies");
                 });
@@ -387,32 +376,17 @@ namespace CinemaBooking.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
-            modelBuilder.Entity("ActorMovie", b =>
-                {
-                    b.HasOne("CinemaBooking.Models.Actor", null)
-                        .WithMany()
-                        .HasForeignKey("ActorsId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("CinemaBooking.Models.Movie", null)
-                        .WithMany()
-                        .HasForeignKey("MoviesId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
             modelBuilder.Entity("CinemaBooking.Models.ActorMovie", b =>
                 {
                     b.HasOne("CinemaBooking.Models.Actor", "Actor")
-                        .WithMany("ActorMovie")
-                        .HasForeignKey("ActorsId")
+                        .WithMany("ActorMovies")
+                        .HasForeignKey("ActorId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("CinemaBooking.Models.Movie", "Movie")
-                        .WithMany("ActorMovie")
-                        .HasForeignKey("MoviesId")
+                        .WithMany("ActorMovies")
+                        .HasForeignKey("MovieId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -493,7 +467,7 @@ namespace CinemaBooking.Migrations
 
             modelBuilder.Entity("CinemaBooking.Models.Actor", b =>
                 {
-                    b.Navigation("ActorMovie");
+                    b.Navigation("ActorMovies");
                 });
 
             modelBuilder.Entity("CinemaBooking.Models.Category", b =>
@@ -508,7 +482,7 @@ namespace CinemaBooking.Migrations
 
             modelBuilder.Entity("CinemaBooking.Models.Movie", b =>
                 {
-                    b.Navigation("ActorMovie");
+                    b.Navigation("ActorMovies");
                 });
 #pragma warning restore 612, 618
         }

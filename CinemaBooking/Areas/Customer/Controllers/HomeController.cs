@@ -1,5 +1,7 @@
 using System.Diagnostics;
 using CinemaBooking.Models;
+using CinemaBooking.Models.ViewModel;
+using CinemaBooking.Repositories;
 using CinemaBooking.Repositories.IRepositories;
 using Microsoft.AspNetCore.Mvc;
 
@@ -11,11 +13,15 @@ namespace CinemaBooking.Areas.Customer.Controllers
         IMovieRepository movieRepository;
         ICategoryRepository categoryRepository;
         ICinemaRepository cinemaRepository;
-        public HomeController(IMovieRepository movieRepository, ICategoryRepository categoryRepository, ICinemaRepository cinemaRepository)
+        IActorMovieRepository actorMovieRepository;
+        public HomeController(IMovieRepository movieRepository, 
+            ICategoryRepository categoryRepository, ICinemaRepository cinemaRepository, IActorMovieRepository actorMovieRepository)
         {
             this.cinemaRepository = cinemaRepository;
+            this.actorMovieRepository = actorMovieRepository;
             this.movieRepository = movieRepository;
             this.categoryRepository = categoryRepository;
+
         }
 
 
@@ -45,8 +51,10 @@ namespace CinemaBooking.Areas.Customer.Controllers
 
         public IActionResult Details(int movieId)
         {
-            var movie = movieRepository.GetDetailsByMovieId(movieId);
-            return View(movie);
+            var movie = movieRepository.GetOne(filter:  e => e.Id == movieId, includes: [e => e.Cinema, e => e.Category] );
+            var actorMovies = actorMovieRepository.Get(filter: e=> e.MovieId == movieId, includes: [e => e.Actor]).ToList();
+            DetailsVM detailsVM = new DetailsVM() { ActorMovie= actorMovies, Movie = movie};
+            return View(detailsVM);
         }
 
         public IActionResult Privacy()
